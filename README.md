@@ -32,4 +32,17 @@ For installing R and R Studio, follows the installation instructions [here](http
 
 The required packages to run all the scripts contained in this repository can be installed as follow: 
 
+```
+# Package edgeR and TopGO from Bioconductor:
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("edgeR")
+BiocManager::install("TopGO")
+
+# Packages ggplot2, gplots, ggrepel, dvtools, ggpubr and corrplot:
+install.packages(c('ggplot2', 'gplots', 'ggrepel', 'dvtools', 'ggpubr', 'corrplot'))
+```
+
+
+
 
