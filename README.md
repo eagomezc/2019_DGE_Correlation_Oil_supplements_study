@@ -12,7 +12,7 @@ This repository contains the **R scripts** used to run differential gene express
 
 ## Hardware requirements: 
 
-All the scripts and software used in the paper *Enriched marine oils supplements increase peripheral blood SPM concentrations and reprogram host immune responses: A randomized double-blind placebo-controlled study* were run in a standard computer (RAM: 8GB, CP$: 4 cores, 3.60 GHZ/core) with a maximum runtime of approx. 3 minutes for the more demanding script ______. 
+All the scripts and software used in the paper *Enriched marine oils supplements increase peripheral blood SPM concentrations and reprogram host immune responses: A randomized double-blind placebo-controlled study* were run in a standard computer (RAM: 8GB, CP$: 4 cores, 3.60 GHZ/core) with a maximum runtime of approx. 3 minutes for the more demanding script [2_GO_analysis_(TopGO)](). 
 
 A computer with lower specs (e.g. 2GB of RAM) will work but some scripts will take longer to run. 
 
