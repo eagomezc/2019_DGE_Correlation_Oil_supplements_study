@@ -1,17 +1,35 @@
-# Load libraries; install from scratch if needed
-libraries <- c("topGO", "lintr", "lattice")
-for (lib in libraries) {
-  if (require(package = lib, character.only = TRUE)) {
-    print("Successful")
-  } else {
-    print("Installing")
-    source("https://bioconductor.org/biocLite.R")
-    biocLite(pkgs = lib)
-    library(lib, character.only = TRUE )
-  }
-}
+# ----------------------------------------- GENE ONTOLOGY ENRICHMENT ANALYSIS  -------------------------------------------#
 
-options(scipen = 999)
+# The gene ontology terms represents gene product properties. These terms covers three domains: Cellular Component, molecular,
+# function and biological process. Each term is related with a general or very specific function in the system. 
+
+# The GO ontology is structured as a directed acyclic graph, and each term has defined relationships to one or more other
+# terms in the same domain, and sometimes to other domains. The GO vocabulary is designed to be species-neutral, and 
+# includes terms applicable to prokaryotes and eukaryotes, single and multicellular organisms.
+
+# With a DGE analysis we can find the genes that are down or upregulated between different conditions; the GO enrichment 
+# analysis allows to understand a little more if there is a connection between all the differential expressed genes and 
+# what are their functions in the organism. 
+
+# ---> LIBRARIES: 
+
+library(topGO)
+library(devtools)
+library(ggplot2)
+library(ggpubr) 
+
+#---> INPUT AND OUTPUT:
+
+# In this section please specify where are the input files and where you want to save the output files.
+# In the input and output variable you can see what is the path expected from the user to write.
+
+input <- "C:/Users/hhy270/Documents/GitHub/2019_DGE_Correlation_Oil_supplements_study/a_Data/2_GO_analysis_(TopGO)/"
+output <- "C:/Users/hhy270/Documents/GitHub/2019_DGE_Correlation_Oil_supplements_study/c_Expected_Outputs/2_GO_analysis_(TopGO)/"
+
+# !!!! IMPORTANT: For this script to work the READ COUNTS FILE has to be called: 2_GO_DGE_p_values_list.txt
+# !!!! IMPORTANT: For this script to work the SAMPLES INFO FILE has to be called: 2_GO_Human_go_terms.txt
+
+#---> DATA LOAD: 
 
 # for (pv_file in c("edge_paired_filter", "edge_paired_filter_wl", "limma_paired_filter", "limma_paired_filter_wl")) {
 pv_file <- "edge_paired_filter_NOutliers" # Using Adjust p values (BH correction)
