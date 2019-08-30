@@ -31,8 +31,21 @@ output <- "C:/Users/hhy270/Documents/GitHub/2019_DGE_Correlation_Oil_supplements
 
 #---> DATA LOAD: 
 
-# for (pv_file in c("edge_paired_filter", "edge_paired_filter_wl", "limma_paired_filter", "limma_paired_filter_wl")) {
-pv_file <- "edge_paired_filter_NOutliers" # Using Adjust p values (BH correction)
+# Open the file with the genes and the Adjust p values (BH correction).
+
+# The tab delimited table consists in two columns "gene" and "p_value", showing all the genes and their respective Adj p
+# values obtained from the DGE. 
+# See a_Data/2_GO_analysis_(TopGO)/2_GO_DGE_p_values_list.txt  
+
+genes_p_value <- read.table(
+  file = paste(input, "2_GO_DGE_p_values_list.txt", sep = ""),
+  header = TRUE,
+  sep = "\t")
+
+# Open the file with the genes and their related GO terms for the organism of interest (e.g: Homo Sapiens).
+
+# The tab delimited table consists in two columns "gene" and "GO_term", showing all the genes for a  genome and their 
+# associated GO terms (separated by colons ","; e.g: GO:0005576, GO:0005615, GO:0070062,...).
 
 ## Step One
 ## GO annotations
