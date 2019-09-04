@@ -27,7 +27,7 @@ input <- "C:/Users/hhy270/Documents/GitHub/2019_DGE_Correlation_Oil_supplements_
 output <- "C:/Users/hhy270/Documents/GitHub/2019_DGE_Correlation_Oil_supplements_study/c_Expected_Outputs/1_DGE_analysis_(Edge_R)/"
 
 # !!!! IMPORTANT: For this script to work the READ COUNTS FILE has to be called: 1_DGE_analysis_(Edge_R)_read_counts.txt
-# !!!! IMPORTANT: For this script to work the SAMPLES INFO FILE has to be called: 1_DGE_analysis_(Edge_R)_sample_info.txt
+# !!!! IMPORTANT: For this script to work the CLASSIFICATION FILE has to be called: 1_DGE_analysis_(Edge_R)_sample_info.txt
 
 #---> DATA LOAD: 
 

@@ -26,8 +26,8 @@ library(ggpubr)
 input <- "C:/Users/hhy270/Documents/GitHub/2019_DGE_Correlation_Oil_supplements_study/a_Data/2_GO_analysis_(TopGO)/"
 output <- "C:/Users/hhy270/Documents/GitHub/2019_DGE_Correlation_Oil_supplements_study/c_Expected_Outputs/2_GO_analysis_(TopGO)/"
 
-# !!!! IMPORTANT: For this script to work the READ COUNTS FILE has to be called: 2_GO_DGE_p_values_list.txt
-# !!!! IMPORTANT: For this script to work the SAMPLES INFO FILE has to be called: 2_GO_Human_go_terms.txt
+# !!!! IMPORTANT: For this script to work the GENES P VALUE has to be called: 2_GO_DGE_p_values_list.txt
+# !!!! IMPORTANT: For this script to work the GENOME GO TERMS has to be called: 2_GO_Human_go_terms.txt
 
 #---> DATA LOAD: 
 
@@ -46,6 +46,17 @@ genes_p_value <- read.table(
 
 # The tab delimited table consists in two columns "gene" and "GO_term", showing all the genes for a  genome and their 
 # associated GO terms (separated by colons ","; e.g: GO:0005576, GO:0005615, GO:0070062,...).
+# See a_Data/2_GO_analysis_(TopGO)/2_GO_Human_go_terms.txt
+
+genome_GO_terms <- readMappings(file = paste(input, "2_GO_Human_go_terms.txt", sep = ""))
+
+#---> DATA PREPARATION: 
+
+
+
+
+
+
 
 ## Step One
 ## GO annotations
