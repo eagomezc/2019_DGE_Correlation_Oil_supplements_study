@@ -87,10 +87,6 @@ rownames(percentages) <- rownames(lm)
 # It's going to take the columns from the first table and compare them with the columns of the second table. 
 cor_final <- cor(lm, percentages, method = "spearman")
 
-# Using the psych software: 
-matrix_correlation <- corr.test(lm, percentages, method = "spearman", adjust = "BH") #NONE Same values than my script
-corr_final <- matrix_correlation$r
-corr_pvalues_adj <- matrix_correlation$p
 
 p_value_vector <- NULL
 p_value_data_frame <- data.frame(del = c(1:25))
@@ -126,16 +122,13 @@ p_value_analysis <- corrplot(cor_final, method = "circle", p.mat = p_value_data_
 #pdf(file = "C:/Users/hhy270/Dropbox/GC-JD-7904 project/output/7_correlation_analysis/correlation_matrix.pdf",
 #    width = 25, height = 12, onefile = TRUE)
 
-col3 <- colorRampPalette(c("red", "white", "blue")) 
+#col3 <- colorRampPalette(c("red", "white", "blue")) 
 adjust_p_value_analysis <- corrplot(cor_final, method = "circle", p.mat = p_adj_value_data_frame, sig.level = 0.1, 
-                                    insig = "blank",col = terrain.colors(100), tl.col = "black", tl.srt = 45, tl.pos = "n",
+                                    insig = "blank",col = col3, tl.col = "black", tl.srt = 45, tl.pos = "n",
                                     cl.pos = "b") # CHANGE THIS ONE
 
-#print(adjust_p_value_analysis)
+print(adjust_p_value_analysis)
 #dev.off()
-
-adjust_p_value_psych <- corrplot(corr_final, method = "square", p.mat = corr_pvalues_adj, title = "psych adjust",
-                                 sig.level = 0.1, insig = "blank", tl.col = "black", tl.srt = 45)
 
 write.table(cor_final, 
             file = paste("C:/Users/hhy270/Dropbox/GC-JD-7904 project/output/7_correlation_analysis/By groups/",
