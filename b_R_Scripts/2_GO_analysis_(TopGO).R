@@ -52,105 +52,87 @@ genome_GO_terms <- readMappings(file = paste(input, "2_GO_Human_go_terms.txt", s
 
 #---> DATA PREPARATION: 
 
+# Transform genes and p values table in the genelist format requieres for TopGO:
 
+topgo_genes <- genes_p_value$p_value
+names(topgo_genes) <- genes_p_value$gene
 
+#---> GENE ONTOLOGY ANALYSIS: 
 
-
-
-
-## Step One
-## GO annotations
-gene_to_go_mapping_file <- "C:/Users/hhy270/Dropbox/GC-JD-7904 project/input/4_go_terms/human_go_final.txt"
-
-## file of significant genes (2 column file: i.e. gene id and pvalue) file:
-de_genes_file <- paste("C:/Users/hhy270/Dropbox/GC-JD-7904 project/input/4_go_terms/", pv_file, ".txt", sep = "")
-
-output_directory <- paste("C:/Users/hhy270/Dropbox/GC-JD-7904 project/output/4_go_terms/", pv_file, "/", sep = "")
-
-## Read in input file:
-de_genes <- read.table(de_genes_file, header = TRUE)
-
-colnames(de_genes) <- c("locus", "p_value")
-
-## Read in GO annotations:  
-gene_to_go_mapping <- readMappings(file = gene_to_go_mapping_file)
-
-## Convert into topgo's genelist format:
-topgo_genelist        <- de_genes$p_value
-names(topgo_genelist) <- de_genes$locus
+# The gene ontology analysis runs for all the GO categories: Biological process, Molecullar Function and Cellular
+# Component. 
 
 for (go_category in c("BP", "MF", "CC")) {
-  # STEP TWO
-  ## Build the GOdata object in topGO
-  my_go_data <- new("topGOdata",
-                    description = paste("GOtest", go_category, sep = "_"),
-                    ontology    = go_category,
-                    geneSel     = function(x) { # fails to run without this
-                      return(x <= 0.05)
-                    },
-                    allGenes    = topgo_genelist,
-                    gene2GO     = gene_to_go_mapping,
-                    annot       = annFUN.gene2GO,
-                    nodeSize    = 5) # Modify to reduce/increase stringency.
+
+  # Make the GOdata object:
   
-  # STEP THREE
+  go_object  <- new("topGOdata",  # Name of the object 
+                    description = paste("GOtest", go_category, sep = "_"), # Description 
+                    ontology = go_category, # Which category is analysing
+                    geneSel = function(x) {
+                      return(x <= 0.05) # Fails to run without this even if it's not need it
+                      }, 
+                    allGenes = topgo_genes,
+                    gene2GO = genome_GO_terms,
+                    annot = annFUN.gene2GO,
+                    nodeSize = 5) # Modify to reduce/increase stringency (Each GO term has to be associated with
+                                  # at least 5 genes)
   
-  ## Calculate ks test using 'weight01' algorithm:
-  result_weight_ks <- runTest(object    = my_go_data,
-                              algorithm = "weight01",
-                              statistic = "ks")
+  # Kolmogorov-Smirnov test is used to identified the enriched GO terms: 
   
+  ks_results <- runTest(object = go_object, algorithm = "weight01", statistic = "ks")
   
-  ## Combine results from statistical tests:
-  result_weight_output <- GenTable(object       = my_go_data,
-                                   weight_ks    = result_weight_ks,
-                                   orderBy      = "weight_ks",
-                                   numChar      = 42, # Get not full GO terms names
-                                   topNodes     = length(score(result_weight_ks)))
+  # Produce the table with the results:
   
-  ## Subset calls with significance higher than expected:
-  result_weight_output_sig <- subset(x      = result_weight_output,
-                                     subset = (weight_ks <= 0.05))
+  ks_results_table <- GenTable(object = go_object, 
+                             weight_ks = ks_results, 
+                             orderBy = "weight_ks", 
+                             numChar = 42, # Get not full GO terms names but the first _ characters. 
+                             topNodes = length(score(ks_results)))
   
-  ## Correct for multiple testing:
-  result_weight_output_sig$weight_ks_adjusted <- p.adjust(p      = result_weight_output_sig$weight_ks,
-                                                          method = c("BH"),
-                                                          n      = length(result_weight_output_sig$weight_ks))
+  # Separate the results statistical significance (ks test <= 0.05):
   
-  ## Get the significance genes id for each Go Term
-  sig_genes <- de_genes[de_genes$p_value <= 0.05, ]
-  genes <- lapply(result_weight_output_sig$GO.ID, function(x) as.character(unlist(genesInTerm(object = my_go_data, whichGO = x))))
-  go_genes <- lapply(genes, function(x) intersect(x, sig_genes$locus))
+  ks_results_sig <- subset(ks_results_table, subset = (weight_ks <= 0.05))
+  
+  # Adjust p value (FDR) for multiple comparisons. In this case using the BH correction:
+  
+  ks_results_sig$weight_ks_adjusted <- p.adjust(p = ks_results_sig$weight_ks, method = c("BH"),
+                                                n = length(ks_results_sig$weight_ks))
+
+  # Get the significance genes id for each Go Term:
+  
+  sig_genes <- genes_p_value[genes_p_value$p_value <= 0.05, ]
+  genes <- lapply(ks_results_sig$GO.ID, function(x) as.character(unlist(genesInTerm(object = go_object, whichGO = x))))
+  go_genes <- lapply(genes, function(x) intersect(x, sig_genes$gene))
   sig_go_genes <- lapply(go_genes, function(x) paste(x, collapse = ","))
   
-  result_weight_output_sig$genes_id <- unlist(sig_go_genes)
+  ks_results_sig$genes_id <- unlist(sig_go_genes)
   
-  result_weight_output_sig$Term <- gsub(" [a-z]*\\.\\.\\.$", "", result_weight_output_sig$Term)
-  result_weight_output_sig$Term <- gsub("\\.\\.\\.$", "", result_weight_output_sig$Term)
+  ks_results_sig$Term <- gsub(" [a-z]*\\.\\.\\.$", "", ks_results_sig$Term)
+  ks_results_sig$Term <- gsub("\\.\\.\\.$", "", ks_results_sig$Term)
   
-  result_weight_output_sig <- result_weight_output_sig[!(result_weight_output_sig$genes_id == ""), ]
+  ks_results_sig <- ks_results_sig[!(ks_results_sig$genes_id == ""), ]
   
-  ## Print out all GO terms of interest:
-  pdf(file = paste(output_directory,"/", go_category, "_distribution.pdf", sep = ""))
-  for (go_term in 1:nrow(result_weight_output_sig)){
-    print(showGroupDensity(object  = my_go_data,
-                           whichGO = result_weight_output_sig[go_term, "GO.ID"],
+  # ---> OUTPUT:
+  
+  # Print all GO terms of interest:
+  
+  pdf(file = paste(output, "2_", go_category, "_density_plot.pdf", sep = ""))
+  
+  for (go_term in 1:nrow(ks_results_sig)){
+    
+    print(showGroupDensity(object  = go_object,
+                           whichGO = ks_results_sig[go_term, "GO.ID"],
                            ranks   = TRUE,
                            rm.one  = FALSE))
   }
-  dev.off()
-  ## Write to output:
-  write.table(x         = result_weight_output,
-              file      = file.path(output_directory,
-                                    paste(go_category, "no_sig_ks_shortname.tsv", sep = "_")),
-              row.names = FALSE,
-              sep       = "\t")
   
-  write.table(x         = result_weight_output_sig,
-              file      = file.path(output_directory,
-                                    paste(go_category, "sig_ks_shortname.tsv", sep = "_")),
+  dev.off()
+  
+  # Output tables: 
+  
+  write.table(ks_results_sig,
+              file = paste(output, "2_", go_category, "_significant_enriched_GO_terms.tsv", sep = ""),
               row.names = FALSE,
-              sep       = "\t")
+              sep  = "\t")
 }
-
-# }
