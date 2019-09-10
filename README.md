@@ -39,7 +39,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("edgeR")
 BiocManager::install("TopGO")
 
-# Packages ggplot2, gplots, ggrepel, dvtools, ggpubr and corrplot:
+# Packages ggplot2, gplots, ggrepel, dvtools and corrplot:
 install.packages(c('ggplot2', 'gplots', 'ggrepel', 'dvtools', 'corrplot'))
 ```
 # Content:
