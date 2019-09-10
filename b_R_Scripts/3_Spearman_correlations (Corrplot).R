@@ -99,6 +99,16 @@ for (cond in data[!duplicated(data$condition), ]$condition) {
   
   #---> OUTPUT: 
   
+  write.table(cor_final,
+              file = paste(output, "3_", cond, "_correlation.tsv", sep = ""),
+              row.names = TRUE,
+              sep  = "\t")
+  
+  write.table(p_adj_value_data_frame,
+              file = paste(output, "3_", cond, "_adj_p_values.tsv", sep = ""),
+              row.names = TRUE,
+              sep  = "\t")
+  
   pdf(file = paste(output, "3_", cond, "_correlation_matrix.pdf", sep = ""), 
       width = 25, height = 12, onefile = TRUE)
   
