@@ -84,7 +84,7 @@ The subfolders are:
 
 **2_GO_analysis_(TopGO)**: The expected results from this script, for all the GO categories, is a tab-delimited file containing a table with the significant GO terms, the number of times it was annotated, the number of times it was annotated in significant genes from DGE, the expected number of times to be annonated, the *p* values and adjust *p* values (FDR) from the KS test and the significant genes associated with it. A second file, a pdf file, contains the distribution plots of the GO terms in all the genes and the significant genes; with this file is possible check which GO terms are actually showing a tendency of be annotated only in the significant genes from DGE. 
 
-**3_Correlation_analysis_(Corrplot)**: The expected results from this script is a correlation matrix plot showing positive and negative correlation in different colors (red for positive correlations and blue por negative correlations). Besides that, the script produces the correlation values from the matrix (tab-delimited table) and their associated adjust *p* value (FDR) (tab-delimited table).
+**3_Correlation_analysis_(Corrplot)**: The expected results from this script is a correlation matrix plot showing positive and negative correlation in different colors (blue for positive correlations and red for negative correlations). Besides that, the script produces the correlation values from the matrix (tab-delimited table) and their associated adjust *p* value (FDR) (tab-delimited table).
 
 More details about how this files are generated can be seen in the comments of each script. 
 
