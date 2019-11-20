@@ -92,4 +92,4 @@ More details about how this files are generated can be seen in the comments of e
 
  If you use these codes for your research please cite these paper:
  
- *To be provided*
+ *Souza PR, Marques RM, Gomez EA, Colas RA, De Matteis R, Zak A, Patel M, Collier DJ, Dalli J. Enriched marine olil supplements increase peripheral blood specialized pro-resolving mediators concentrations and reprogram host immune responses; a randomized double-blind placebo-controlled study. Circulation Research 2020; 126:00-00. DOI: 10.11.61/CIRCRESAHA.119.315506*
