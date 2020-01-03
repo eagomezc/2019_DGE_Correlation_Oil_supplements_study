@@ -115,7 +115,7 @@ for (cond in data[!duplicated(data$condition), ]$condition) {
   # Creates the correlation plot showing only significant results.
   
   adjust_p_value_analysis <- corrplot(cor_final, method = "circle", p.mat = p_adj_value_data_frame, sig.level = 0.1, 
-                                      insig = "blank", tl.col = "black", tl.srt = 45,cl.pos = "r")
+                                      insig = "blank", tl.col = "black", tl.srt = 45, cl.pos = "r")
   
   print(adjust_p_value_analysis)
   
